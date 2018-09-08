@@ -14,12 +14,12 @@ class Router {
 		"POST"
 	);
 
-	function __construct(IRequest $request)
+	public function __construct(IRequest $request)
 	{
 		$this->request = $request;
 	}
 
-	function __call($name, $args)
+	public function __call($name, $args)
 	{
 		list($route, $method) = $args;
 
@@ -58,7 +58,7 @@ class Router {
 	/**
 	 * Resolves a route
 	 */
-	function resolve()
+	public function resolve()
 	{
 		$methodDictionary = $this->{strtolower($this->request->requestMethod)};
 		$formatedRoute = $this->formatRoute($this->request->requestUri);
@@ -70,10 +70,20 @@ class Router {
 			return;
 		}
 
-		echo call_user_func_array($method, array($this->request));
+		if($this->isClosure($method)){
+			echo call_user_func_array($method, array($this->request));
+		}
+		else{
+			echo $method;
+		}
 	}
 
-	function __destruct()
+	public function isClosure($input)
+	{
+		return is_object($input) && ($input instanceof Closure);
+	}
+
+	public function __destruct()
 	{
 		$this->resolve();
 	}
