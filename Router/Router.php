@@ -48,6 +48,7 @@ class Router {
 
 	private function defaultRequestHandler() {
 		header("{$this->request->serverProtocol} 404 Not Found");
+		echo '404 page not found';
 	}
 
 	/**
@@ -59,6 +60,13 @@ class Router {
 		if (strpos($formatedRoute, '?') !== false) {
 			$formatedRoute = substr($formatedRoute, 0, strpos($formatedRoute, "?"));
 		}
+
+		if(!array_key_exists($formatedRoute, $methodDictionary)){
+
+			$this->defaultRequestHandler();
+			return;
+		}
+
 		$method = $methodDictionary[$formatedRoute];
 
 		if(is_null($method))
