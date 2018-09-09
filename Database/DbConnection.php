@@ -12,23 +12,19 @@ class DbConnection extends SystemComponents {
 	private static $instance = null;
 	private $conn;
 
-	private function __construct($host, $dbName, $username, $password)
-	{
+	private function __construct($host, $dbName, $username, $password) {
 
-		try
-		{
+		try {
 			$this->conn = new PDO("mysql:host=$host;dbname=$dbName", $username, $password);
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		}catch (PDOException $e)
-		{
+		}catch (PDOException $e) {
 			echo $e->getMessage();
 			die();
 		}
 	}
 
-	public static function connectToDb()
-	{
+	public static function connectToDb() {
 		$settings = SystemComponents::getSettings();
 
 		if(DbConnection::$instance == null)

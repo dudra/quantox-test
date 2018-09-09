@@ -10,8 +10,7 @@ abstract class SystemComponents {
 
 	protected $settings;
 
-	public static function getSettings()
-	{
+	public static function getSettings() {
 		$settings['dbhost'] = 'localhost';
 		$settings['dbusername'] = 'root';
 		$settings['dbpassword'] = '';

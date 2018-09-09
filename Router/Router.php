@@ -14,13 +14,11 @@ class Router {
 		"POST"
 	);
 
-	public function __construct(IRequest $request)
-	{
+	function __construct(IRequest $request) {
 		$this->request = $request;
 	}
 
-	public function __call($name, $args)
-	{
+	function __call($name, $args) {
 		list($route, $method) = $args;
 
 		if(!in_array(strtoupper($name), $this->supportedHttpMethods))
@@ -35,8 +33,7 @@ class Router {
 	 * Removes trailing forward slashes from the right of the route.
 	 * @param route (string)
 	 */
-	private function formatRoute($route)
-	{
+	private function formatRoute($route) {
 		$result = rtrim($route, '/');
 		if ($result === '')
 		{
@@ -45,23 +42,23 @@ class Router {
 		return $result;
 	}
 
-	private function invalidMethodHandler()
-	{
+	private function invalidMethodHandler() {
 		header("{$this->request->serverProtocol} 405 Method Not Allowed");
 	}
 
-	private function defaultRequestHandler()
-	{
+	private function defaultRequestHandler() {
 		header("{$this->request->serverProtocol} 404 Not Found");
 	}
 
 	/**
 	 * Resolves a route
 	 */
-	public function resolve()
-	{
+	function resolve() {
 		$methodDictionary = $this->{strtolower($this->request->requestMethod)};
 		$formatedRoute = $this->formatRoute($this->request->requestUri);
+		if (strpos($formatedRoute, '?') !== false) {
+			$formatedRoute = substr($formatedRoute, 0, strpos($formatedRoute, "?"));
+		}
 		$method = $methodDictionary[$formatedRoute];
 
 		if(is_null($method))
@@ -70,20 +67,10 @@ class Router {
 			return;
 		}
 
-		if($this->isClosure($method)){
-			echo call_user_func_array($method, array($this->request));
-		}
-		else{
-			echo $method;
-		}
+		echo call_user_func_array($method, array($this->request));
 	}
 
-	public function isClosure($input)
-	{
-		return is_object($input) && ($input instanceof Closure);
-	}
-
-	public function __destruct()
+	function __destruct()
 	{
 		$this->resolve();
 	}

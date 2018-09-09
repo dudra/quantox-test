@@ -8,21 +8,18 @@
 include_once 'IRequest.php';
 class Request implements IRequest {
 
-	function __construct()
-	{
+	function __construct() {
 		$this->bootstrapSelf();
 	}
 
-	private function bootstrapSelf()
-	{
+	private function bootstrapSelf() {
 		foreach($_SERVER as $key => $value)
 		{
 			$this->{$this->toCamelCase($key)} = $value;
 		}
 	}
 
-	private function toCamelCase($string)
-	{
+	private function toCamelCase($string) {
 		$result = strtolower($string);
 
 		preg_match_all('/_[a-z]/', $result, $matches);
@@ -34,8 +31,7 @@ class Request implements IRequest {
 		return $result;
 	}
 
-	public function getBody()
-	{
+	public function getBody() {
 		if($this->requestMethod === "GET")
 		{
 			return;

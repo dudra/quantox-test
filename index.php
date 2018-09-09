@@ -12,19 +12,13 @@ include_once 'Controllers/EventController.php';
 $router = new Router(new Request);
 
 $router->get('/', function() {
-	return <<<HTML
-  <h1>Home</h1>
-HTML;
+	return 'Home';
 });
 
-$router->get('/get', EventController::getEvents());
-
-$router->get('/profile', function($request) {
-	return <<<HTML
-  <h1>Profile</h1>
-HTML;
+$router->get('/get', function () {
+	return EventController::getEvents();
 });
 
 $router->post('/data', function($request) {
-	return json_encode($request->getBody());
+	return EventController::saveEvent($request);
 });
