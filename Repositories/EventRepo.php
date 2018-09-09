@@ -55,7 +55,7 @@ class EventRepo implements IEvent {
 								FROM (SELECT country, SUM(counter) as cnt 
 									  FROM events e 
 									  GROUP BY country 
-									  ORDER BY cnt DESC LIMIT 2) t1 
+									  ORDER BY cnt DESC LIMIT 5) t1 
 								LEFT JOIN events t2 ON t1.country = t2.country 
 								WHERE t2.date >= DATE(NOW()) - INTERVAL 7 DAY 
 								GROUP BY t2.country, t2.event_name");
